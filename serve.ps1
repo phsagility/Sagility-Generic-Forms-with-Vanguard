@@ -1,8 +1,8 @@
-$root = Split-Path -Parent $MyInvocation.MyCommand.Path
+$root = (Get-Location).Path
 $listener = [Net.HttpListener]::new()
 $listener.Prefixes.Add('http://localhost:8000/')
 $listener.Start()
-Write-Host "Sagility Forms running at http://localhost:8000/"
+Write-Host "Sagility Editor running at http://localhost:8000/"
 Write-Host "Press Ctrl+C to stop."
 try {
     while ($listener.IsListening) {
@@ -15,7 +15,7 @@ try {
             $context.Response.ContentType = switch ([IO.Path]::GetExtension($file).ToLowerInvariant()) {
                 '.html' { 'text/html; charset=utf-8'; break }
                 '.png' { 'image/png'; break }
-                '.pdf' { 'application/pdf'; break }
+                '.mjs' { 'text/javascript; charset=utf-8'; break }
                 default { 'application/octet-stream' }
             }
             $context.Response.StatusCode = 200
